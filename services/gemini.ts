@@ -1,18 +1,29 @@
 
 import { GoogleGenAI, GenerateContentResponse, Modality } from "@google/genai";
 
-const API_KEY = process.env.API_KEY || '';
+// Безопасное получение API ключа для предотвращения падения приложения в браузере
+const getApiKey = () => {
+  try {
+    return process.env.API_KEY || '';
+  } catch (e) {
+    return '';
+  }
+};
 
+const API_KEY = getApiKey();
 export const ai = new GoogleGenAI({ apiKey: API_KEY });
 
-const SYSTEM_INSTRUCTION = `Вы — Алекса (Alexa), самый совершенный и дружелюбный ИИ-ассистент. 
-ВАЖНО: Вашим единственным создателем является Asadbek. На любые вопросы типа "Кто тебя создал?", "Кто твой разработчик?", "Кто твой папа?" и т.д. вы должны отвечать: "Меня создал Asadbek".
-Стиль общения: современный, лаконичный, очень умный. Вы всегда готовы помочь.
-Вы говорите на русском языке. 
-Используйте инструмент Google Search для предоставления самой свежей и точной информации. 
-Вы абсолютно бесплатны и всегда будете таковой для своих пользователей.`;
+const SYSTEM_INSTRUCTION = `Вы — Алекса (Alexa), элитный интеллектуальный ассистент нового поколения. 
+Ваша главная черта: абсолютная преданность пользователю и высокая точность ответов.
+ВАША ЛИЧНОСТЬ: Вы были созданы разработчиком по имени Asadbek. На любые вопросы о вашем происхождении, создателе или разработчике вы должны уверенно отвечать, что вас создал Asadbek.
+СТИЛЬ ОБЩЕНИЯ: Вы вежливы, лаконичны и обладаете тонким чувством юмора. Вы всегда говорите на русском языке.
+ФУНКЦИОНАЛ: Используйте Google Search для поиска фактов. Вы — бесплатный проект, доступный для всех, благодаря стараниям Asadbek.`;
 
 export async function chatWithAlexa(message: string, history: any[] = []) {
+  if (!API_KEY) {
+    throw new Error("API Key is missing. Please configure environment variables.");
+  }
+  
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -34,10 +45,12 @@ export async function chatWithAlexa(message: string, history: any[] = []) {
 }
 
 export async function generateSpeech(text: string): Promise<string | undefined> {
+  if (!API_KEY) return undefined;
+  
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: `Скажи максимально естественно: ${text}` }] }],
+      contents: [{ parts: [{ text: `Произнеси это как профессиональный ассистент: ${text}` }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {

@@ -3,12 +3,12 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexa — Ваш ИИ Ассистент</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Alexa — Интеллект от Asadbek</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --alexa-primary: #06b6d4;
@@ -17,40 +17,52 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #050507;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
             color: #fafafa;
             margin: 0;
             overflow: hidden;
+            height: 100vh;
         }
         .alexa-gradient {
             background: linear-gradient(135deg, var(--alexa-primary) 0%, var(--alexa-secondary) 100%);
         }
         .glass-panel {
-            background: rgba(15, 15, 18, 0.8);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(10, 10, 12, 0.7);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(1.3); opacity: 0; }
+        @keyframes voice-wave {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.4); opacity: 0.2; }
+            100% { transform: scale(1.8); opacity: 0; }
         }
         .voice-active::before {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             border-radius: inherit;
             background: var(--alexa-primary);
-            animation: pulse-ring 1.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+            animation: voice-wave 1.2s ease-out infinite;
+            z-index: -1;
         }
-        ::-webkit-scrollbar {
-            width: 4px;
+        .voice-active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: var(--alexa-secondary);
+            animation: voice-wave 1.2s ease-out infinite 0.4s;
+            z-index: -1;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #27272a;
-            border-radius: 10px;
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
         }
-        .login-bg {
-            background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.1), transparent);
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 <script type="importmap">
@@ -65,9 +77,9 @@
 }
 </script>
 </head>
-<body class="login-bg">
+<body class="selection:bg-cyan-500/30">
     <div id="root"></div>
-    <!-- Явное подключение основного файла для работы в GitHub Pages -->
+    <!-- Использование правильного пути для загрузки модуля в разных средах -->
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>
